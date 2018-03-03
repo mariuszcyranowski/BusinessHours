@@ -6,7 +6,7 @@ namespace BusinessHoursTests
 {
     class BusinessHours
     {
-        private DayOfWeek[] _weekDays;
+        private Queue<DayOfWeek> _weekDays;
         public Tuple<DayOfWeek, DayOfWeek?>[] NormalizedWeekDays { get; private set; }
 
         public IEnumerable<DayOfWeek> WeekDays
@@ -14,56 +14,52 @@ namespace BusinessHoursTests
             get => _weekDays;
             set
             {
-                _weekDays = value.OrderByDescending(x => x, DayOfWeekComparer.MondayFirst).Distinct().ToArray();
-                Normalize();
+                _weekDays = new Queue<DayOfWeek>(value.OrderBy(x => x, DayOfWeekComparer.MondayFirst).Distinct());
+                NormalizedWeekDays = Normalize().ToArray();
             }
         }
 
-        private void Normalize()
+        private IEnumerable<Tuple<DayOfWeek, DayOfWeek?>> Normalize()
         {
-            if (_weekDays.Length == 1)
+            if (_weekDays.Count == 1)
             {
-                NormalizedWeekDays = new[]
-                {
-                    new Tuple<DayOfWeek, DayOfWeek?>(_weekDays[0], null), 
-                };
+                yield return Make(_weekDays.Dequeue());
             }
-            else if (_weekDays.Length == 2)
+            else if (_weekDays.Count == 2)
             {
-                NormalizedWeekDays = new[]
-                {
-                    new Tuple<DayOfWeek, DayOfWeek?>(_weekDays[0], _weekDays[1]), 
-                };
+                yield return Make(_weekDays.Dequeue(), _weekDays.Dequeue());
             }
             else
             {
-                var result = new List<Tuple<DayOfWeek, DayOfWeek?>>();
+                var queue = new Queue<DayOfWeek>(_weekDays);
 
-                var stack = new Stack<DayOfWeek>(_weekDays);
-
-                while (stack.TryPop(out var first))
+                while (queue.TryDequeue(out var first))
                 {
-                    if (!stack.TryPeek(out var second))
+                    if (!queue.TryPeek(out var second))
                     {
-                        result.Add(new Tuple<DayOfWeek, DayOfWeek?>(first, null));
+                        yield return Make(first);
                     }
                     else if (DayOfWeekComparer.MondayFirst.Compare(first, second) < -1)
                     {
-                        result.Add(new Tuple<DayOfWeek, DayOfWeek?>(first, null));
+                        yield return Make(first);
                     }
                     else
                     {
-                        second = stack.Pop();
-                        while (stack.TryPeek(out var next) && 
+                        second = queue.Dequeue();
+                        while (queue.TryPeek(out var next) && 
                                DayOfWeekComparer.MondayFirst.Compare(second, next) == -1)
                         {
-                            second = stack.Pop();
+                            second = queue.Dequeue();
                         }
-                        result.Add(new Tuple<DayOfWeek, DayOfWeek?>(first, second));
+                        yield return Make(first, second);
                     } 
                 }
-                NormalizedWeekDays = result.ToArray();
             }
+        }
+
+        private Tuple<DayOfWeek, DayOfWeek?> Make(DayOfWeek first, DayOfWeek? second = null)
+        {
+            return new Tuple<DayOfWeek, DayOfWeek?>(first, second);
         }
     }
 }
