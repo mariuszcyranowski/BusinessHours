@@ -39,5 +39,22 @@ namespace BusinessHoursTests
                 DayOfWeek.Sunday, 
                 DayOfWeek.Monday));    
         }
+
+        [Fact]
+        void FormattedTest()
+        {
+            var periods = new[]
+            {
+                DayPeriodFactory
+                    .Make(DayOfWeek.Monday),
+                DayPeriodFactory
+                    .Make(DayOfWeek.Wednesday, DayOfWeek.Thursday),
+                DayPeriodFactory
+                    .Make(DayOfWeek.Saturday, DayOfWeek.Sunday),
+            };
+            
+            Assert.Equal("Monday,Wednesday-Thursday,Saturday-Sunday", periods.Format());
+
+        }
     }
 }
