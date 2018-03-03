@@ -19,11 +19,13 @@ namespace BusinessHoursTests
                 }
             };
             Assert.Collection(bussinessHours.DayPeriods,
-                x => Assert.Equal(DayPeriodFactory.Make(
+                
+                period0 => Assert.Equal(DayPeriodFactory.Make(
                     DayOfWeek.Monday, 
-                    DayOfWeek.Tuesday), x),
-                x => Assert.Equal(DayPeriodFactory.Make(
-                    DayOfWeek.Thursday), x)
+                    DayOfWeek.Tuesday), period0),
+                
+                period1 => Assert.Equal(DayPeriodFactory.Make(
+                    DayOfWeek.Thursday), period1)
             );
         }
 
@@ -41,12 +43,15 @@ namespace BusinessHoursTests
             };
 
             Assert.Collection(bussinessHours.DayPeriods,
-                x => Assert.Equal(DayPeriodFactory.Make(
-                    DayOfWeek.Monday), x),
-                x => Assert.Equal(DayPeriodFactory.Make(
-                    DayOfWeek.Wednesday), x),
-                x => Assert.Equal(DayPeriodFactory.Make(
-                    DayOfWeek.Friday), x)
+                
+                period0 => Assert.Equal(DayPeriodFactory.Make(
+                    DayOfWeek.Monday), period0),
+                
+                period1 => Assert.Equal(DayPeriodFactory.Make(
+                    DayOfWeek.Wednesday), period1),
+                
+                period2 => Assert.Equal(DayPeriodFactory.Make(
+                    DayOfWeek.Friday), period2)
             );
         }
 
@@ -64,11 +69,13 @@ namespace BusinessHoursTests
                 }
             };
             Assert.Collection(bussinessHours.DayPeriods,
-                x => Assert.Equal(DayPeriodFactory.Make(
+                
+                period0 => Assert.Equal(DayPeriodFactory.Make(
                     DayOfWeek.Tuesday, 
-                    DayOfWeek.Thursday), x),
-                x => Assert.Equal(DayPeriodFactory.Make(
-                    DayOfWeek.Sunday), x)
+                    DayOfWeek.Thursday), period0),
+                
+                period1 => Assert.Equal(DayPeriodFactory.Make(
+                    DayOfWeek.Sunday), period1)
             );
         }
         
@@ -88,14 +95,17 @@ namespace BusinessHoursTests
             };
             
             Assert.Collection(bussinessHours.DayPeriods,
-                x => Assert.Equal(DayPeriodFactory.Make(
-                    DayOfWeek.Monday), x),
-                x => Assert.Equal(DayPeriodFactory.Make(
+                
+                period0 => Assert.Equal(DayPeriodFactory.Make(
+                    DayOfWeek.Monday), period0),
+                
+                period1 => Assert.Equal(DayPeriodFactory.Make(
                     DayOfWeek.Wednesday, 
-                    DayOfWeek.Thursday), x),
-                x => Assert.Equal(DayPeriodFactory.Make(
+                    DayOfWeek.Thursday), period1),
+                
+                period2 => Assert.Equal(DayPeriodFactory.Make(
                     DayOfWeek.Saturday,
-                    DayOfWeek.Sunday), x)
+                    DayOfWeek.Sunday), period2)
             );
         }
     }
