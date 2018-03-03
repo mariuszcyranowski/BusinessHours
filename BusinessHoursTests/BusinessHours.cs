@@ -52,14 +52,15 @@ namespace BusinessHoursTests
                     else
                     {
                         toDay = _days.Dequeue();
-                        while (_days.TryPeek(out var nextDay) && 
-                               fromDay.IsFollowedBy(nextDay))
+                        while (_days.TryPeek(out var nextDay) &&
+                               toDay.IsFollowedBy(nextDay))
                         {
                             toDay = _days.Dequeue();
                         }
+
                         yield return DayPeriodFactory
                             .Make(fromDay, toDay);
-                    } 
+                    }
                 }
             }
         }
