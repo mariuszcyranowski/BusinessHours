@@ -9,18 +9,20 @@ namespace BusinessHoursTests
         [Fact]
         private void DayOfWeekComparisionTest()
         {
-            var dayOfWeeks = new[]
-            {
-                DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Tuesday,
-                DayOfWeek.Sunday, DayOfWeek.Monday
-            }.OrderBy(x => x, DayOfWeekComparer.MondayFirst);
+            var days = new[]
+                {
+                    DayOfWeek.Friday, DayOfWeek.Saturday, 
+                    DayOfWeek.Tuesday,DayOfWeek.Sunday, 
+                    DayOfWeek.Monday
+                }
+                .OrderBy(x => x, DayOfWeekComparer.MondayFirst);
          
-            Assert.Collection(dayOfWeeks,
-                week => Assert.Equal(DayOfWeek.Monday, week),
-                week => Assert.Equal(DayOfWeek.Tuesday, week),
-                week => Assert.Equal(DayOfWeek.Friday, week),
-                week => Assert.Equal(DayOfWeek.Saturday, week),
-                week => Assert.Equal(DayOfWeek.Sunday, week)
+            Assert.Collection(days,
+                day => Assert.Equal(DayOfWeek.Monday, day),
+                day => Assert.Equal(DayOfWeek.Tuesday, day),
+                day => Assert.Equal(DayOfWeek.Friday, day),
+                day => Assert.Equal(DayOfWeek.Saturday, day),
+                day => Assert.Equal(DayOfWeek.Sunday, day)
             );
         }
         
@@ -28,11 +30,14 @@ namespace BusinessHoursTests
         public void DayOfWeekDistanceTest()
         {
             Assert.Equal(-1, DayOfWeekComparer.MondayFirst.Compare(
-                DayOfWeek.Monday, DayOfWeek.Tuesday));    
+                DayOfWeek.Monday, 
+                DayOfWeek.Tuesday));    
             Assert.Equal(-2, DayOfWeekComparer.MondayFirst.Compare(
-                DayOfWeek.Monday, DayOfWeek.Wednesday));    
+                DayOfWeek.Monday, 
+                DayOfWeek.Wednesday));    
             Assert.Equal(6, DayOfWeekComparer.MondayFirst.Compare(
-                DayOfWeek.Sunday, DayOfWeek.Monday));    
+                DayOfWeek.Sunday, 
+                DayOfWeek.Monday));    
         }
     }
 }
