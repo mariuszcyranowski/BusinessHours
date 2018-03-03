@@ -5,10 +5,11 @@ namespace BusinessHoursTests
 {
     class DayOfWeekComparer : IComparer<DayOfWeek>
     {
-        private DayOfWeekComparer()
+        static DayOfWeekComparer()
         {
-            
+            MondayFirst = new DayOfWeekComparer();
         }
+        
         private readonly Dictionary<DayOfWeek, int> ordering = 
             new Dictionary<DayOfWeek, int>()
         {
@@ -21,13 +22,14 @@ namespace BusinessHoursTests
             { DayOfWeek.Sunday, 7}
         };
 
-        public static DayOfWeekComparer MondayFirst => 
-            new DayOfWeekComparer();
+        public static DayOfWeekComparer MondayFirst { get; }
 
         public int Compare(DayOfWeek x, DayOfWeek y)
         {
             //return ordering[x].CompareTo(ordering[y]);
             return ordering[x] - ordering[y];
         }
+        
+         
     }
 }

@@ -44,8 +44,7 @@ namespace BusinessHoursTests
                         yield return DayPeriodFactory
                             .Make(fromDay);
                     }
-                    else if (DayOfWeekComparer.MondayFirst
-                                 .Compare(fromDay, toDay) < -1)
+                    else if (!fromDay.IsFollowedBy(toDay))
                     {
                         yield return DayPeriodFactory
                             .Make(fromDay);
@@ -54,8 +53,7 @@ namespace BusinessHoursTests
                     {
                         toDay = _days.Dequeue();
                         while (_days.TryPeek(out var nextDay) && 
-                               DayOfWeekComparer.MondayFirst
-                                   .Compare(toDay, nextDay) == -1)
+                               fromDay.IsFollowedBy(nextDay))
                         {
                             toDay = _days.Dequeue();
                         }

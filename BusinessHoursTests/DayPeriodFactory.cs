@@ -9,5 +9,8 @@ namespace BusinessHoursTests
         {
             return new Tuple<DayOfWeek, DayOfWeek?>(fromDay, toDay);
         }
+
+        
     }
+
 }
