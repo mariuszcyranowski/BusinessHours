@@ -35,11 +35,9 @@ namespace BusinessHoursTests
             }
             else
             {
-                var queue = new Queue<DayOfWeek>(_days);
-
-                while (queue.TryDequeue(out var fromDay))
+                while (_days.TryDequeue(out var fromDay))
                 {
-                    if (!queue.TryPeek(out var toDay))
+                    if (!_days.TryPeek(out var toDay))
                     {
                         yield return DayPeriodFactory.Make(fromDay);
                     }
@@ -49,11 +47,11 @@ namespace BusinessHoursTests
                     }
                     else
                     {
-                        toDay = queue.Dequeue();
-                        while (queue.TryPeek(out var nextDay) && 
+                        toDay = _days.Dequeue();
+                        while (_days.TryPeek(out var nextDay) && 
                                DayOfWeekComparer.MondayFirst.Compare(toDay, nextDay) == -1)
                         {
-                            toDay = queue.Dequeue();
+                            toDay = _days.Dequeue();
                         }
                         yield return DayPeriodFactory.Make(fromDay, toDay);
                     } 
