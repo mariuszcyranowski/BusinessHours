@@ -9,7 +9,8 @@ namespace BusinessHoursTests
         {
             
         }
-        private readonly Dictionary<DayOfWeek, int> ordering = new Dictionary<DayOfWeek, int>()
+        private readonly Dictionary<DayOfWeek, int> ordering = 
+            new Dictionary<DayOfWeek, int>()
         {
             { DayOfWeek.Monday, 1},
             { DayOfWeek.Tuesday, 2},
@@ -20,7 +21,8 @@ namespace BusinessHoursTests
             { DayOfWeek.Sunday, 7}
         };
 
-        public static DayOfWeekComparer MondayFirst => new DayOfWeekComparer();
+        public static DayOfWeekComparer MondayFirst => 
+            new DayOfWeekComparer();
 
         public int Compare(DayOfWeek x, DayOfWeek y)
         {

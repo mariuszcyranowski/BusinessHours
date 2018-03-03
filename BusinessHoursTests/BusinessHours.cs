@@ -6,60 +6,59 @@ namespace BusinessHoursTests
 {
     class BusinessHours
     {
-        private Queue<DayOfWeek> _weekDays;
-        public Tuple<DayOfWeek, DayOfWeek?>[] NormalizedWeekDays { get; private set; }
+        private Queue<DayOfWeek> _days;
+        public Tuple<DayOfWeek, DayOfWeek?>[] DayPeriods 
+        { get; private set; }
 
-        public IEnumerable<DayOfWeek> WeekDays
+        public IEnumerable<DayOfWeek> Days
         {
-            get => _weekDays;
+            get => _days;
             set
             {
-                _weekDays = new Queue<DayOfWeek>(value.OrderBy(x => x, DayOfWeekComparer.MondayFirst).Distinct());
-                NormalizedWeekDays = Normalize().ToArray();
+                _days = new Queue<DayOfWeek>(value
+                    .OrderBy(x => x, DayOfWeekComparer.MondayFirst)
+                    .Distinct()
+                );
+                DayPeriods = Normalize().ToArray();
             }
         }
 
         private IEnumerable<Tuple<DayOfWeek, DayOfWeek?>> Normalize()
         {
-            if (_weekDays.Count == 1)
+            if (_days.Count == 1)
             {
-                yield return Make(_weekDays.Dequeue());
+                yield return DayPeriodFactory.Make(_days.Dequeue());
             }
-            else if (_weekDays.Count == 2)
+            else if (_days.Count == 2)
             {
-                yield return Make(_weekDays.Dequeue(), _weekDays.Dequeue());
+                yield return DayPeriodFactory.Make(_days.Dequeue(), _days.Dequeue());
             }
             else
             {
-                var queue = new Queue<DayOfWeek>(_weekDays);
+                var queue = new Queue<DayOfWeek>(_days);
 
-                while (queue.TryDequeue(out var first))
+                while (queue.TryDequeue(out var fromDay))
                 {
-                    if (!queue.TryPeek(out var second))
+                    if (!queue.TryPeek(out var toDay))
                     {
-                        yield return Make(first);
+                        yield return DayPeriodFactory.Make(fromDay);
                     }
-                    else if (DayOfWeekComparer.MondayFirst.Compare(first, second) < -1)
+                    else if (DayOfWeekComparer.MondayFirst.Compare(fromDay, toDay) < -1)
                     {
-                        yield return Make(first);
+                        yield return DayPeriodFactory.Make(fromDay);
                     }
                     else
                     {
-                        second = queue.Dequeue();
-                        while (queue.TryPeek(out var next) && 
-                               DayOfWeekComparer.MondayFirst.Compare(second, next) == -1)
+                        toDay = queue.Dequeue();
+                        while (queue.TryPeek(out var nextDay) && 
+                               DayOfWeekComparer.MondayFirst.Compare(toDay, nextDay) == -1)
                         {
-                            second = queue.Dequeue();
+                            toDay = queue.Dequeue();
                         }
-                        yield return Make(first, second);
+                        yield return DayPeriodFactory.Make(fromDay, toDay);
                     } 
                 }
             }
-        }
-
-        private Tuple<DayOfWeek, DayOfWeek?> Make(DayOfWeek first, DayOfWeek? second = null)
-        {
-            return new Tuple<DayOfWeek, DayOfWeek?>(first, second);
         }
     }
 }

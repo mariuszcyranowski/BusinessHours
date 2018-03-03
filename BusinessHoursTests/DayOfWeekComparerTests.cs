@@ -27,9 +27,12 @@ namespace BusinessHoursTests
         [Fact]
         public void DayOfWeekDistanceTest()
         {
-            Assert.Equal(-1, DayOfWeekComparer.MondayFirst.Compare(DayOfWeek.Monday, DayOfWeek.Tuesday));    
-            Assert.Equal(-2, DayOfWeekComparer.MondayFirst.Compare(DayOfWeek.Monday, DayOfWeek.Wednesday));    
-            Assert.Equal(6, DayOfWeekComparer.MondayFirst.Compare(DayOfWeek.Sunday, DayOfWeek.Monday));    
+            Assert.Equal(-1, DayOfWeekComparer.MondayFirst.Compare(
+                DayOfWeek.Monday, DayOfWeek.Tuesday));    
+            Assert.Equal(-2, DayOfWeekComparer.MondayFirst.Compare(
+                DayOfWeek.Monday, DayOfWeek.Wednesday));    
+            Assert.Equal(6, DayOfWeekComparer.MondayFirst.Compare(
+                DayOfWeek.Sunday, DayOfWeek.Monday));    
         }
     }
 }
