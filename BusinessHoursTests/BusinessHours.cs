@@ -27,11 +27,13 @@ namespace BusinessHoursTests
         {
             if (_days.Count == 1)
             {
-                yield return DayPeriodFactory.Make(_days.Dequeue());
+                yield return DayPeriodFactory
+                    .Make(_days.Dequeue());
             }
             else if (_days.Count == 2)
             {
-                yield return DayPeriodFactory.Make(_days.Dequeue(), _days.Dequeue());
+                yield return DayPeriodFactory
+                    .Make(_days.Dequeue(), _days.Dequeue());
             }
             else
             {
@@ -39,21 +41,26 @@ namespace BusinessHoursTests
                 {
                     if (!_days.TryPeek(out var toDay))
                     {
-                        yield return DayPeriodFactory.Make(fromDay);
+                        yield return DayPeriodFactory
+                            .Make(fromDay);
                     }
-                    else if (DayOfWeekComparer.MondayFirst.Compare(fromDay, toDay) < -1)
+                    else if (DayOfWeekComparer.MondayFirst
+                                 .Compare(fromDay, toDay) < -1)
                     {
-                        yield return DayPeriodFactory.Make(fromDay);
+                        yield return DayPeriodFactory
+                            .Make(fromDay);
                     }
                     else
                     {
                         toDay = _days.Dequeue();
                         while (_days.TryPeek(out var nextDay) && 
-                               DayOfWeekComparer.MondayFirst.Compare(toDay, nextDay) == -1)
+                               DayOfWeekComparer.MondayFirst
+                                   .Compare(toDay, nextDay) == -1)
                         {
                             toDay = _days.Dequeue();
                         }
-                        yield return DayPeriodFactory.Make(fromDay, toDay);
+                        yield return DayPeriodFactory
+                            .Make(fromDay, toDay);
                     } 
                 }
             }
