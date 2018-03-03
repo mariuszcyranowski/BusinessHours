@@ -114,5 +114,69 @@ namespace BusinessHoursTests
                     period2)
             );
         }
+        
+        [Fact]
+        public void Test5()
+        {
+            var bussinessHours = new BusinessHours
+            {
+                Days = new[]
+                {
+                    DayOfWeek.Monday,
+                    DayOfWeek.Tuesday,
+                    DayOfWeek.Wednesday,
+                    DayOfWeek.Thursday,
+                    DayOfWeek.Friday,
+                    DayOfWeek.Saturday,
+                    DayOfWeek.Sunday
+                }
+            };
+            
+            Assert.Collection(bussinessHours.DayPeriods,
+                
+                period0 => Assert.Equal(DayPeriodFactory
+                        .Make(DayOfWeek.Monday, DayOfWeek.Sunday), 
+                    period0)
+            );
+        }
+        
+        [Fact]
+        public void Test6()
+        {
+            var bussinessHours = new BusinessHours
+            {
+                Days = new[]
+                {
+                    DayOfWeek.Monday,
+                }
+            };
+            
+            Assert.Collection(bussinessHours.DayPeriods,
+                
+                period0 => Assert.Equal(DayPeriodFactory
+                        .Make(DayOfWeek.Monday), 
+                    period0)
+            );
+        }
+        
+        [Fact]
+        public void Test7()
+        {
+            var bussinessHours = new BusinessHours
+            {
+                Days = new[]
+                {
+                    DayOfWeek.Wednesday,
+                    DayOfWeek.Thursday
+                }
+            };
+            
+            Assert.Collection(bussinessHours.DayPeriods,
+                
+                period0 => Assert.Equal(DayPeriodFactory
+                        .Make(DayOfWeek.Wednesday, DayOfWeek.Thursday), 
+                    period0)
+            );
+        }
     }
 }
