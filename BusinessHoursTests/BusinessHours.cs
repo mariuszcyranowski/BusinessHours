@@ -25,42 +25,29 @@ namespace BusinessHoursTests
 
         private IEnumerable<Tuple<DayOfWeek, DayOfWeek?>> Normalize()
         {
-            if (_days.Count == 1)
+            while (_days.TryDequeue(out var fromDay))
             {
-                yield return DayPeriodFactory
-                    .Make(_days.Dequeue());
-            }
-            else if (_days.Count == 2)
-            {
-                yield return DayPeriodFactory
-                    .Make(_days.Dequeue(), _days.Dequeue());
-            }
-            else
-            {
-                while (_days.TryDequeue(out var fromDay))
+                if (!_days.TryPeek(out var toDay))
                 {
-                    if (!_days.TryPeek(out var toDay))
-                    {
-                        yield return DayPeriodFactory
-                            .Make(fromDay);
-                    }
-                    else if (!fromDay.IsFollowedBy(toDay))
-                    {
-                        yield return DayPeriodFactory
-                            .Make(fromDay);
-                    }
-                    else
+                    yield return DayPeriodFactory
+                        .Make(fromDay);
+                }
+                else if (!fromDay.IsFollowedBy(toDay))
+                {
+                    yield return DayPeriodFactory
+                        .Make(fromDay);
+                }
+                else
+                {
+                    toDay = _days.Dequeue();
+                    while (_days.TryPeek(out var nextDay) &&
+                           toDay.IsFollowedBy(nextDay))
                     {
                         toDay = _days.Dequeue();
-                        while (_days.TryPeek(out var nextDay) &&
-                               toDay.IsFollowedBy(nextDay))
-                        {
-                            toDay = _days.Dequeue();
-                        }
-
-                        yield return DayPeriodFactory
-                            .Make(fromDay, toDay);
                     }
+
+                    yield return DayPeriodFactory
+                        .Make(fromDay, toDay);
                 }
             }
         }
